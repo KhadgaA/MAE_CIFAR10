@@ -1,13 +1,14 @@
+import matplotlib.pyplot as plt
 import torch
 import timm
 import numpy as np
-
+import os
 from einops import repeat, rearrange
 from einops.layers.torch import Rearrange
 
 from timm.models.layers import trunc_normal_
 from timm.models.vision_transformer import Block
-
+from torch.utils.tensorboard import SummaryWriter
 def random_indexes(size : int):
     forward_indexes = np.arange(size)
     np.random.shuffle(forward_indexes)
@@ -165,6 +166,7 @@ class ViT_Classifier(torch.nn.Module):
 
 
 if __name__ == '__main__':
+
     shuffle = PatchShuffle(0.75)
     a = torch.rand(16, 2, 10)
     b, forward_indexes, backward_indexes = shuffle(a)
