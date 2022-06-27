@@ -120,7 +120,7 @@ class MAE_Decoder(torch.nn.Module):
         img = self.patch2img(patches)
         mask = self.patch2img(mask)
 
-        return img, mask
+        return img, mask # patches == prediction_scores
 
 class MAE_ViT(torch.nn.Module):
     def __init__(self,
@@ -141,7 +141,7 @@ class MAE_ViT(torch.nn.Module):
     def forward(self, img):
         features, backward_indexes = self.encoder(img)
         predicted_img, mask = self.decoder(features,  backward_indexes)
-        return predicted_img, mask
+        return  predicted_img, mask # patches== prediction_scores for gumbel softmamx
 
 class ViT_Classifier(torch.nn.Module):
     def __init__(self, encoder : MAE_Encoder, num_classes=10) -> None:

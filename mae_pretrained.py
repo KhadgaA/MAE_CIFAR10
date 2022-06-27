@@ -181,14 +181,14 @@ if __name__ == '__main__':
     # img = torch.rand(2, 3, 32, 32).to(torch.device('cuda'))
     image = Image.open('../cat.png')
     trans = tt.Compose(
-        [tt.ToTensor(), tt.ConvertImageDtype(torch.float32), tt.Resize(size=(32, 32)), tt.Normalize(mean, std)])
+        [tt.ToTensor(), tt.ConvertImageDtype(torch.float32), tt.Resize(size=(32, 32))])
     # trans2 = tt.Compose([tt.ToTensor(), tt.ConvertImageDtype(torch.float32), tt.Resize(size=(256, 256))])
     img = trans(image).unsqueeze_(0).cuda()
     print(img.shape)
     # teacher_model =U.to_device(Resnet.resnet56(num_classes=10), U.get_default_device())
 
     # model.load_state_dict(torch.load('vit-t-mae.pt'))
-    model = MAE_ViT()
+    model = MAE_ViT(mask_ratio=0.1,patch_size=2)
     model = model.cuda()
     # model = utils.to_device(model,utils.get_default_device())
     # model= torch.load('../vit-t-mae.pt')
@@ -209,7 +209,10 @@ if __name__ == '__main__':
     img = predicted_val_img.detach().cpu()
     # img = rearrange(img, '(v h1 w1) c h w -> c (h1 h) (w1 v w)', w1=1, v=1)
     print(img.shape)
-    plt.imshow(((img+1)/2).squeeze().permute(1,2,0))
+    plt.subplot(121)
+    plt.imshow(img.squeeze().permute(1,2,0))
+    plt.subplot(122)
+    plt.imshow(image)
     plt.show()
 
     # img = img.detach().to(torch.device('cpu'))
